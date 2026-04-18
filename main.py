@@ -75,16 +75,16 @@ sum_total_price = pd.read_sql("""
     FROM orderDetails
 """, conn).sum()
 
-# STEP 9
-# Original orderDate + day, month, year columns
+## STEP 9
+# Join orderDetails with orders to get the orderDate
 df_day_month_year = pd.read_sql("""
     SELECT
-        orderDate,
-        STRFTIME('%d', orderDate) AS day,
-        STRFTIME('%m', orderDate) AS month,
-        STRFTIME('%Y', orderDate) AS year
-    FROM orderDetails
+        o.orderDate,
+        STRFTIME('%d', o.orderDate) AS day,
+        STRFTIME('%m', o.orderDate) AS month,
+        STRFTIME('%Y', o.orderDate) AS year
+    FROM orderDetails od
+    JOIN orders o ON od.orderNumber = o.orderNumber
 """, conn)
-
 # Close the connection
 conn.close()
